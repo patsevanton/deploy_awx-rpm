@@ -27,7 +27,7 @@
       mode: 0644
     when: ansible_distribution == 'CentOS'
 
-   - name: Add Erlang Repository
+  - name: Add Erlang Repository
     template:
       src: rabbitmq-erlang.repo.j2
       dest: /etc/yum.repos.d/rabbitmq-erlang.repo
