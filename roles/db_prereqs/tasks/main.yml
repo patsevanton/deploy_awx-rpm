@@ -8,11 +8,9 @@
     when: ansible_distribution == 'Red Hat Enterprise Linux'
   
   - name: Activate Satellite repositories for CentOS
-    rhsm_repository:
-      name: "{{ item }}"
-      state: enabled
-    with_items:
-      - centos-release-scl-rh
+    yum:
+      name: centos-release-scl-rh
+      state: present
     when: ansible_distribution == 'CentOS'
 
   - name: Install PostgreSQL
