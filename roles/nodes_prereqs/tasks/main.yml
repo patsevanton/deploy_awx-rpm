@@ -45,23 +45,14 @@
         - centos-release-scl
         - centos-release-scl-rh
         - yum-utils
-        - wget
     when: ansible_distribution == 'CentOS'
 
-  - name: Install rh-python36-build
+  - name: Install rh-git29
     yum:
-      name: rh-python36-build
-      disable_gpg_check: yes
+      name: rh-git29
       state: present
+    when: ansible_distribution == 'CentOS'
 
-  - name: Remove rh-python36-python-six
-    yum:
-      name: rh-python36-python-six
-      state: absent
-
-  - name: Install Python dependencies
-    shell: yum install -y -x "*-debuginfo, rh-python36-python-wheel-0.30.0a0-1.el7.noarch, rh-python36-Babel-2.6.0-1.noarch, rh-python36-python-sqlalchemy-1.1.14-1.el7.x86_64, rh-python36-python-six-1.11.0-1.el7.noarch, rh-python36-python-psycopg2-2.7.3-1.el7.x86_64, rh-python36-python-psycopg2-doc-2.7.3-1.el7.x86_64" "rh-python36*"
-  
   - name: Install Ansible & tower-cli
     yum:
       name: 
@@ -78,6 +69,31 @@
     yum:
       name: memcached
       state: present
+    when: ansible_distribution == 'Red Hat Enterprise Linux'
+
+  - name: Install PostgreSQL & Memcached
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - rh-postgresql10
+        - memcached
+    when: ansible_distribution == 'CentOS'
+
+  - name: remove the PostgreSQL package
+    yum:
+      name: rh-postgresql10
+      state: absent
+    when: ansible_distribution == 'CentOS'
+
+  - name: Install rh-python36
+    yum:
+      name: rh-python36
+      state: present
+    when: ansible_distribution == 'CentOS'
+
+  - name: Install Python dependencies
+    shell: yum -y install --disablerepo='*' --enablerepo='copr:copr.fedorainfracloud.org:mrmeee:ansible-awx, base' -x *-debuginfo rh-python36*
 
   - name: Install AWX
     yum:
