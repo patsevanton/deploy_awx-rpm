@@ -1,10 +1,19 @@
 ---
-  - name: Activate Satellite repositories
+  - name: Activate Satellite repositories for RHEL
     rhsm_repository:
       name: "{{ item }}"
       state: enabled
     with_items:
       - rhel-server-rhscl-7-rpms
+    when: ansible_distribution == 'Red Hat Enterprise Linux'
+  
+  - name: Activate Satellite repositories for CentOS
+    rhsm_repository:
+      name: "{{ item }}"
+      state: enabled
+    with_items:
+      - centos-release-scl-rh
+    when: ansible_distribution == 'CentOS'
 
   - name: Install PostgreSQL
     yum:
