@@ -11,14 +11,41 @@
       - "{{ epel_repo }}"
       - "{{ awx_dependencies_repo }}"
     when: ansible_distribution == 'Red Hat Enterprise Linux'
-  
-  - name: Activate Satellite repositories for CentOS
+
+  - name: Add AWX Repositories for CentOS
+    shell: yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/mrmeee/ansible-awx/repo/epel-7/mrmeee-ansible-awx-epel-7.repo
+    args:
+      creates: /etc/yum.repos.d/ansible-awx.repo 
+    when: ansible_distribution == 'CentOS'
+
+  - name: Add RabbitMQ Repository
+    template:
+      src: rabbitmq.repo.j2
+      dest: /etc/yum.repos.d/rabbitmq.repo
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_distribution == 'CentOS'
+
+   - name: Add Erlang Repository
+    template:
+      src: rabbitmq-erlang.repo.j2
+      dest: /etc/yum.repos.d/rabbitmq-erlang.repo
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_distribution == 'CentOS'
+
+  - name: Install packages for CentOS
     yum:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - centos-release-scl
-      - centos-release-scl-rh
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - epel-release
+        - centos-release-scl
+        - centos-release-scl-rh
+        - yum-utils
+        - wget
     when: ansible_distribution == 'CentOS'
 
   - name: Install rh-python36-build
