@@ -9,8 +9,11 @@
   
   - name: Activate Satellite repositories for CentOS
     yum:
-      name: centos-release-scl-rh
+      name: {{ item }}
       state: present
+    with_items:
+      - centos-release-scl
+      - centos-release-scl-rh
     when: ansible_distribution == 'CentOS'
 
   - name: Install PostgreSQL

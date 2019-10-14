@@ -17,6 +17,7 @@
       name: "{{ item }}"
       state: present
     with_items:
+      - centos-release-scl
       - centos-release-scl-rh
       - "{{ awx_repo }}"
       - "{{ epel_repo }}"
