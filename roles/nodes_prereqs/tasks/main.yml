@@ -19,9 +19,6 @@
     with_items:
       - centos-release-scl
       - centos-release-scl-rh
-      - "{{ awx_repo }}"
-      - "{{ epel_repo }}"
-      - "{{ awx_dependencies_repo }}"
     when: ansible_distribution == 'CentOS'
 
   - name: Install rh-python36-build
