@@ -66,7 +66,7 @@
     yum:
       name: 
         - ansible 
-        - tower-cli
+        - ansible-tower-cli
       state: present
 
   - name: Install RabbitMQ
