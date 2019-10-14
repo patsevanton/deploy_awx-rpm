@@ -1,5 +1,5 @@
 ---
-  - name: Activate Satellite repositories
+  - name: Activate Satellite repositories for RHEL
     rhsm_repository:
       name: "{{ item }}"
       state: enabled
@@ -10,6 +10,18 @@
       - "{{ awx_repo }}"
       - "{{ epel_repo }}"
       - "{{ awx_dependencies_repo }}"
+    when: ansible_distribution == 'Red Hat Enterprise Linux'
+  
+  - name: Activate Satellite repositories for CentOS
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - centos-release-scl-rh
+      - "{{ awx_repo }}"
+      - "{{ epel_repo }}"
+      - "{{ awx_dependencies_repo }}"
+    when: ansible_distribution == 'CentOS'
 
   - name: Install rh-python36-build
     yum:
